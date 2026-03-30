@@ -1,16 +1,37 @@
-# Nerfies
+# FAVLA Project Page
 
-This is the repository that contains source code for the [Nerfies website](https://nerfies.github.io).
+This repository contains the project website for:
 
-If you find Nerfies useful for your work please cite:
+**FAVLA: A Force-Adaptive Fast-Slow VLA model for Contact-Rich Robotic Manipulation**
+
+## Contents
+
+- `index.html`: Main page content and section layout
+- `static/images/`: Figures used in the paper page
+- `static/videos/`: Demo videos for task results, OOD comparisons, and failure cases
+- `static/css/`: Bulma and custom styles
+- `static/js/`: Frontend utility scripts
+
+## Local Preview
+
+Run a local static server from the repo root:
+
+```bash
+python3 -m http.server 8000
 ```
-@article{park2021nerfies
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
-}
+
+Then open:
+
+```text
+http://localhost:8000
 ```
 
-# Website License
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+## Notes
+
+- Videos are compressed for web hosting and GitHub size constraints.
+- `<video>` tags use `preload="none"` to reduce initial page bandwidth.
+- The page includes contact-rich manipulation results.
+- The page includes contact-rich and high-precision results.
+- The page includes original vs OOD paired comparisons.
+- The page includes generalization studies.
+- The page includes failure cases.

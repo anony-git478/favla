@@ -28,12 +28,22 @@
       margin-bottom: 0.75rem;
     }
 
-    .generalization-section .content video,
-    .failure-section .content video {
+    .video-frame {
+      width: 100%;
+      aspect-ratio: 4/ 3;
+      background: #000;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .video-frame video {
       display: block;
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: contain;
     }
+
   </style>
 </head>
 <body>
@@ -55,9 +65,11 @@
 <!-- <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/favla_teaser.mp4" type="video/mp4">
-      </video>
+      <div class="video-frame">
+          <video autoplay muted loop playsinline>
+            <source src="./static/videos/favla_teaser.mp4" type="video/mp4">
+          </video>
+          </div>
       <h2 class="subtitle has-text-centered">
         FAVLA introduces a fast-slow VLA architecture equipped with force-adaptative control stragety, enabling robots to perform highly stable contact-rich manipulation tasks with smaller contact force.
       </h2>
@@ -65,29 +77,7 @@
   </div>
 </section> -->
 
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Force/torque feedback can substantially improve Vision-Language-Action (VLA) models on contact-rich manipulation, 
-            but most existing approaches fuse all modalities at a single operating frequency. This design ignores the mismatched 
-            sampling rates of real robot sensors, forcing downsampling of the high-frequency contact cues needed for reactive correction. Combined 
-            with common VLM-action-expert (AE) pipelines that execute action chunks largely open loop between expensive VLM updates, unified-frequency 
-            fusion often yields delayed responses to impacts, stick-slip, and force spikes. We propose FAVLA, 
-            a force-adaptive fast-slow VLA that decouples slow perception planning from fast contact-aware control. 
-            FAVLA runs a slow VLM at a fixed low frequency to encode modalities to produce latent representations and to predict near-future force variation. 
-            A fast AE then executes at a variable high frequency, conditioning on the latest force sequence data to generate reactive actions. We 
-            further introduce a force adapter that injects highfrequency force features into multiple AE layers, and adaptively schedules the AE's execution frequency based on the VLM's predicted force variation. Extensive experiments on contact-rich 
-            tasks demonstrate that FAVLA significantly outperforms baselines, achieving superior reactivity and success rates, especially with a smaller contact force during manipulation.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <section class="section">
   <div class="container is-max-desktop">
@@ -96,7 +86,7 @@
         <h2 class="title is-3">Methodology</h2>
         <div class="content has-text-justified">
           <figure>
-            <img src="./static/images/overviewv1.svg" alt="FAVLA Architecture" width="100%">
+            <img src="./static/images/overviewv1.svg" alt="FAVLA Architecture" width="90%">
             <figcaption class="has-text-left is-size-6 mt-2">
               Figure 1: Overview of the FAVLA. FAVLA integrates a large Slow VLM Backbone for semantic reasoning, and a smaller Fast Action
               Expert for responsive action control. The model processes multimodal inputs at different frequencies and generates action trajectories
@@ -105,7 +95,7 @@
             </figcaption>
           </figure>
           <figure>
-            <img src="./static/images/fastslov1.svg" alt="fastslow" width="100%">
+            <img src="./static/images/fastslov1.svg" alt="fastslow" width="60%">
             <figcaption class="has-text-left is-size-6 mt-2">
               Figure 2: Our force-adaptive fast-slow inference strategy. The
               fast AE runs multiple times within each action chunk, conditioned
@@ -124,30 +114,60 @@
 
 <section class="section">
   <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Experiments</h2>
+        <div class="content has-text-justified">
+          <figure>
+            <img src="./static/images/tele.svg" alt="fastslow" width="50%">
+            <figcaption class="has-text-left is-size-6 mt-2">
+              Figure 3: We collect demonstration dataset with a 3D SpaceMouse teleoperation setup, 
+              where the operator controls relative end-effector motions and receives real-time 6D force feedback 
+              (we transfer the force feedback to audio). 
+              During data collection, robot/object initial poses are randomized for diversity, 
+              multimodal data streams (poses and force/torque at 200 Hz, external and wrist images at 30 Hz with 640 x 360 size) 
+              are synchronized and downsampled to 30 Hz, and the final dataset is converted to LeRobot v2.1 format for training.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Contact-Rich Manipulation Results</h2>
     <div class="columns is-centered">
       <div class="column">
         <div class="content">
           <h3 class="title is-4">Task 1: FAVLA Cucumber Peeling</h3>
-          <video id="task1" autoplay controls muted loop playsinline height="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/peeling.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column">
         <div class="content">
           <h3 class="title is-4">Task 2: FAVLA Box Flipping</h3>
-          <video id="task2" autoplay controls muted loop playsinline height="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/fliping.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column">
         <div class="content">
           <h3 class="title is-4">Task 3: FAVLA Whiteboard Wiping</h3>
-          <video id="task2" autoplay controls muted loop playsinline height="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/wiping.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
     </div>
@@ -161,25 +181,99 @@
       <div class="column">
         <div class="content">
           <h3 class="title is-4">Task 4: FAVLA Gear Placement (Position 1)</h3>
-          <video id="task1" autoplay controls muted loop playsinline height="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/assem.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column">
         <div class="content">
           <h3 class="title is-4">Task 5: FAVLA Gear Placement (Position 2)</h3>
-          <video id="task2" autoplay controls muted loop playsinline height="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/assem1.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column">
         <div class="content">
           <h3 class="title is-4">Task 6: FAVLA USB Drive Insertion</h3>
-          <video id="task2" autoplay controls muted loop playsinline height="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/usb.mp4" type="video/mp4">
           </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Frequency Prediction and Contact Force Analysis Results</h2>
+    <div class="columns is-multiline is-centered">
+    <div class="column is-half-desktop is-full-mobile">
+        <div class="content">
+          <h3 class="title is-4">USB Insertion</h3>
+          <div class="video-frame">
+            <video controls muted loop playsinline preload="none">
+              <source src="./static/videos/usbfreq.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="column is-half-desktop is-full-mobile">
+        <div class="content">
+          <h3 class="title is-4">USB Insertion (OOD)</h3>
+          <div class="video-frame">
+            <video controls muted loop playsinline preload="none">
+              <source src="./static/videos/usboodfreq.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="column is-half-desktop is-full-mobile">
+        <div class="content">
+          <h3 class="title is-4">Gear Placement</h3>
+          <div class="video-frame">
+            <video controls muted loop playsinline preload="none">
+              <source src="./static/videos/gearfreq.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="column is-half-desktop is-full-mobile">
+        <div class="content">
+          <h3 class="title is-4">Gear Placement (OOD)</h3>
+          <div class="video-frame">
+            <video controls muted loop playsinline preload="none">
+              <source src="./static/videos/gearoodfreq.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="column is-half-desktop is-full-mobile">
+        <div class="content">
+          <h3 class="title is-4">Box Flipping</h3>
+          <div class="video-frame">
+            <video controls muted loop playsinline preload="none">
+              <source src="./static/videos/boxfreq.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="column is-half-desktop is-full-mobile">
+        <div class="content">
+          <h3 class="title is-4">Box Flipping (OOD)</h3>
+          <div class="video-frame">
+            <video controls muted loop playsinline preload="none">
+              <source src="./static/videos/boxoodfreq.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
       </div>
     </div>
@@ -194,49 +288,61 @@
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Study 1: Unseen Box</h3>
-          <video id="study1" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/unseenflip.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Study 2: Unseen Handwriting</h3>
-          <video id="study2" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/unseenwipe.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Study 3: Unseen USB Drive</h3>
-          <video id="study3" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/unseenusb.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Study 4: Unseen Gear</h3>
-          <video id="study4" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/unseengear1.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Study 5: Unseen Base</h3>
-          <video id="study5" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/unseengear2.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Study 6: Unseen Gear and Base</h3>
-          <video id="study6" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/unseengear.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
     </div>
@@ -250,55 +356,90 @@
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Case 1: Whiteboard Wiping with Uncleaned Marks</h3>
-          <video id="fail1" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/failwipe.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Case 2: USB Drive Insertion with Misalignment</h3>
-          <video id="fail2" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/failusb1.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Case 3: Unseen USB Drive Insertion with Partial Insertion</h3>
-          <video id="fail3" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/failusb.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Case 4: Cucumber Peeling with Premature Termination</h3>
-          <video id="fail4" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/failpeel.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Case 5: Gear Placement with Timed-Out Alignment Attempts</h3>
-          <video id="fail5" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/failgear.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
       <div class="column is-one-third-desktop is-half-tablet">
         <div class="content">
           <h3 class="title is-4">Case 6: Box Flipping with Incomplete Rotation</h3>
-          <video id="fail6" autoplay controls muted loop playsinline width="100%">
+          <div class="video-frame">
+          <video controls muted loop playsinline preload="none">
             <source src="./static/videos/failflip.mp4" type="video/mp4">
           </video>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.video-frame video').forEach(function (video) {
+      var source = video.querySelector('source');
+      if (source && source.getAttribute('src')) {
+        var src = source.getAttribute('src');
+        var baseName = src.split('/').pop().replace(/\.mp4$/i, '');
+        video.setAttribute('poster', './static/images/posters/' + baseName + '.jpg');
+      }
+
+      var frame = video.closest('.video-frame');
+      if (!frame) {
+        return;
+      }
+
+      frame.addEventListener('click', function () {
+        if (video.paused) {
+          video.play();
+        }
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
